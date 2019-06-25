@@ -37,8 +37,8 @@ class SimpleGraph
         {
            if (m_adjacency[i][i] == -1) // looking for "empty" vertex slot 
            {
-              vertex[i].Value = value; // присваиваем новое значение
-              for(int j = 0; j < max_vertex; j++) // настраиваем связи
+              vertex[i].Value = value; // РїСЂРёСЃРІР°РёРІР°РµРј РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ
+              for(int j = 0; j < max_vertex; j++) // РЅР°СЃС‚СЂР°РёРІР°РµРј СЃРІСЏР·Рё
               {
                  m_adjacency[i][j] = 0;
                  m_adjacency[j][i] = 0;                 
@@ -85,7 +85,7 @@ class SimpleGraph
       int FindVertex (int value)
       {
         for(int i = 0; i < max_vertex; i++) 
-        {  if(vertex[i].Value == value) // ищем вершину v1
+        {  if(vertex[i].Value == value) // РёС‰РµРј РІРµСЂС€РёРЅСѓ v1
            {  if ( m_adjacency[i][i] != -1 ) 
                  return i; 
         }  } 
@@ -102,7 +102,7 @@ void test()
    int V3 = 0;
 	
    SimpleGraph Graph(3);
-   for(int i = 0; i < Graph.max_vertex; i++)  // проверка правильности создания таблицы       
+   for(int i = 0; i < Graph.max_vertex; i++)  // РїСЂРѕРІРµСЂРєР° РїСЂР°РІРёР»СЊРЅРѕСЃС‚Рё СЃРѕР·РґР°РЅРёСЏ С‚Р°Р±Р»РёС†С‹       
    {  for(int j = 0; j < Graph.max_vertex; j++) 
       {  if (Graph.m_adjacency[i][j] != -1) 
             test ++; 
@@ -111,7 +111,7 @@ void test()
 
    Graph.AddVertex(V1);
 
-   int v1 = Graph.FindVertex(V1);        // правильность создания изолированной вершины
+   int v1 = Graph.FindVertex(V1);        // РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ СЃРѕР·РґР°РЅРёСЏ РёР·РѕР»РёСЂРѕРІР°РЅРЅРѕР№ РІРµСЂС€РёРЅС‹
    if (v1 != 0) test++;
    for(int i = 0; i < Graph.max_vertex; i++) 
    {  if ( (Graph.m_adjacency[v1][i] != 0) && (Graph.m_adjacency[i][v1] != 0) )
@@ -166,7 +166,7 @@ void test()
    Graph.RemoveVertex(v2);
    Graph.RemoveVertex(v1);
    //-----------------------------------------
-   cout << endl;  // проверка правильности создания таблицы  
+   cout << endl;  // РїСЂРѕРІРµСЂРєР° РїСЂР°РІРёР»СЊРЅРѕСЃС‚Рё СЃРѕР·РґР°РЅРёСЏ С‚Р°Р±Р»РёС†С‹  
    for(int i = 0; i < Graph.max_vertex; i++)   
    {
       for(int j = 0; j < Graph.max_vertex; j++)
