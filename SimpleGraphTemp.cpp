@@ -166,16 +166,16 @@ void test()
    Graph.RemoveVertex(v2);
    Graph.RemoveVertex(v1);
    //-----------------------------------------
-   cout << endl;  // проверка правильности создания таблицы  
-   for(int i = 0; i < Graph.max_vertex; i++)   
-   {
-      for(int j = 0; j < Graph.max_vertex; j++)
-      {
-         cout << Graph.m_adjacency[i][j] << "    " ;
-      }
-      cout << endl;
-   }
-   cout << endl << "Test result: " << test << endl << endl;
+   //cout << endl;  // проверка правильности создания таблицы  
+   //for(int i = 0; i < Graph.max_vertex; i++)   
+   //{
+   //   for(int j = 0; j < Graph.max_vertex; j++)
+   //   {
+   //      cout << Graph.m_adjacency[i][j] << "    " ;
+   //   }
+   //   cout << endl;
+   //}
+   //cout << endl << "Test result: " << test << endl << endl;
 }
 
 //void main()
