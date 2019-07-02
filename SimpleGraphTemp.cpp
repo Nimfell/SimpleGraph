@@ -317,7 +317,8 @@ class SimpleGraph
                }
                //last = pre_last;
                stack.pop();
-            } 
+            }   
+
             int size = queue.size();
             if(size != 0)
             {  Vertex** way = new Vertex* [size+1];
@@ -333,6 +334,12 @@ class SimpleGraph
    private:
       void white_to_queue(int VFrom, int VTo, int depth)
       {
+         if (queue.peek() == NULL && depth == 0)
+         {
+            queue.push(&vertex[VFrom], depth); // то помещаем в очередь
+            vertex[VFrom].Hit = true;
+            depth++; 
+         }
          if(IsEdge(VFrom, VTo) == true)
          {
             stack.push(&vertex[VFrom], depth-1);
@@ -362,12 +369,6 @@ class SimpleGraph
                   {
                      queue.push(&vertex[i], depth); // то помещаем в очередь
                      vertex[i].Hit = true;
-                  }
-                  else if (queue.peek() == NULL && depth == 0)
-                  {
-                     queue.push(&vertex[i], depth); // то помещаем в очередь
-                     vertex[i].Hit = true;
-                     depth++; 
                   }
                }
             }
@@ -433,7 +434,6 @@ void print_table(SimpleGraph* Graph)
       cout << endl;
    }   
 }
-*/
 
 void test()
 {
@@ -499,8 +499,8 @@ void test()
    Graph.RemoveVertex(v2);
    Graph.RemoveVertex(v1);
    //-----------------------------------------
-   //print_table(&Graph); // проверка правильности создания таблицы 
-   //cout << endl << "Test result: " << test << endl << endl;
+   print_table(&Graph); // проверка правильности создания таблицы 
+   cout << endl << "Test result: " << test << endl << endl;
    //=========================================
    SimpleGraph Graph2(6);
    Graph2.AddVertex(0);
@@ -514,23 +514,27 @@ void test()
    Graph2.AddEdge(2, 4);
    Vertex** way = Graph2.DepthFirstSearch(0, 4);
    //-----------------------------------------
-   //print_table(&Graph2);
-   //print_way(way);
+   print_table(&Graph2);
+   print_way(way);
    //=========================================
    Graph2.AddEdge(3, 4);
    way = Graph2.BreadthFirstSearch(0, 3);   
-   //print_way(way);
+   print_way(way);
    //=========================================
    Graph2.AddVertex(5);
    Graph2.AddEdge(4, 5);
+   way = Graph2.BreadthFirstSearch(5, 0);
+   print_way(way);
    way = Graph2.BreadthFirstSearch(0, 5);
-   //print_way(way);
+   print_way(way);
 
 }
-/*
+
+
 void main()
 {
    test();
    system("pause");
 }
+
 */
