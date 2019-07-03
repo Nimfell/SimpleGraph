@@ -302,9 +302,8 @@ class SimpleGraph
          {                                     
             int depht = stack.depth();        // находим глубину искомого элемента            
             queue.empty();                    // отчищаем очередь
-            queue.push(stack.pop());          // закладываем в очередь путь от искомой в исходную вершину            
-            
-            Vertex* pre_last ;   
+            queue.push(stack.pop());          // закладываем в очередь путь от искомой в исходную вершину  
+            Vertex* pre_last;   
             while (stack.peek() != NULL)      // пока стек заполнен
             {
                pre_last = stack.peek();   
@@ -318,7 +317,6 @@ class SimpleGraph
                //last = pre_last;
                stack.pop();
             }   
-
             int size = queue.size();
             if(size != 0)
             {  Vertex** way = new Vertex* [size+1];
@@ -329,9 +327,51 @@ class SimpleGraph
             } 
          }          
          return NULL;
-      }      
+      }
+            
+      Vertex** WeakVertices() // возвращает список узлов вне треугольников
+      {
+         int* vertexes = new int[max_vertex + 1];
+         int count_way = 0;
+         Vertex** way = new Vertex* [max_vertex+1];
+         find_vert(0, way, vertexes, count_way);
+         return way;
+      }
 
    private:
+      void find_vert(int Vert, Vertex** way, int* vertexes, int count_way)
+      {
+         if (Vert < max_vertex)
+         {            
+            int count_vertexes = 0;
+            for(int i = 0; i < max_vertex; i++) // находим все связанные вершины
+            {  
+               if ( IsEdge(Vert, i) ) 
+               {               
+                  vertexes[count_vertexes++] = i; // сохранили индекс 
+               }              
+            }
+            vertexes[count_vertexes++] = -1;
+         
+            for (int* i = vertexes; *i != -1; i++) // определяем их связь друг с другом
+            {
+               for (int* j = vertexes; *j != -1; j++)
+               {            
+                  if ( IsEdge(*i, *j) ) 
+                  {
+                     find_vert(Vert+1, way, vertexes, count_way); // переход к следующей вершине 
+                     return;
+                  } 
+               }
+            }
+            way[count_way++] = &vertex[Vert];
+            find_vert(Vert+1, way, vertexes, count_way); // переход к следующей вершине 
+            return;
+         }
+         way[count_way] = NULL;
+         delete vertexes;
+      } 
+   
       void white_to_queue(int VFrom, int VTo, int depth)
       {
          if (queue.peek() == NULL && depth == 0)
@@ -355,11 +395,11 @@ class SimpleGraph
                   stack.push(queue.peek(), queue.depth()); // помещаем указатель на вершину в стек из очереди  
                   int depth_1 = stack.depth();      // глубина посл.вершины в стеке
                   queue.pop();
+                  if (queue.peek() == NULL)
+                     return;
                   int depth_2 = queue.depth();      // глубина след.вершины
-
                   if (depth_1 < depth_2)            // если глубина разная, то 
-                     depth++;                   
-
+                     depth++;  
                   Vertex* v_from = queue.peek();    // смотрим след. элемент в очереди
                   white_to_queue( FindVertex(v_from->Value) , VTo, depth);  // делаем его вершиной 
                }
@@ -369,7 +409,7 @@ class SimpleGraph
                   {
                      queue.push(&vertex[i], depth); // то помещаем в очередь
                      vertex[i].Hit = true;
-                  }
+                  }   
                }
             }
          }
@@ -379,7 +419,6 @@ class SimpleGraph
       {
          vertex[VFrom].Hit = true;   // Фиксируем вершину X как посещённую
          stack.push(&vertex[VFrom]); // Помещаем вершину X в стек
-
          if(IsEdge(VFrom, VTo) == true)
          {
             stack.push(&vertex[VTo]);
@@ -391,7 +430,6 @@ class SimpleGraph
             {
                if (IsVertex(i) && vertex[i].Hit == false && IsEdge(VFrom, i) == true) // вершина есть & она не посещена & есть ребро
                   white_to_stack(i, VTo);     // то повторяем 
-
                if (stack.peek() == vertex + VTo)
                   return;
                if (i == max_vertex)
@@ -413,7 +451,13 @@ class SimpleGraph
 /*
 void print_way(Vertex** way)
 {
-   cout << endl;   
+   cout << endl; 
+   if (way == NULL)
+   {
+      cout << "The way is not found" <<endl;
+      return;
+   }
+
    for(Vertex** i = way; *i != NULL; i++)   
    {
       Vertex* n = *i;
@@ -525,16 +569,43 @@ void test()
    Graph2.AddEdge(4, 5);
    way = Graph2.BreadthFirstSearch(5, 0);
    print_way(way);
+   //-----------------------------------------
    way = Graph2.BreadthFirstSearch(0, 5);
+   print_way(way);
+   //=========================================
+   SimpleGraph Graph3(8); 
+   Graph3.AddVertex(0);
+   Graph3.AddVertex(1);
+   Graph3.AddVertex(2);
+   Graph3.AddVertex(3);
+   Graph3.AddVertex(4);
+   Graph3.AddVertex(5);
+   Graph3.AddVertex(6);
+   Graph3.AddVertex(7);
+   Graph3.AddEdge(6, 2);
+   Graph3.AddEdge(6, 3);
+   Graph3.AddEdge(2, 3);
+   Graph3.AddEdge(2, 1);
+   Graph3.AddEdge(1, 4);
+   Graph3.AddEdge(3, 4);
+   Graph3.AddEdge(4, 7);
+   Graph3.AddEdge(7, 5);
+   print_table(&Graph3);
+
+   way = Graph3.BreadthFirstSearch(6, 7);
+   print_way(way);
+   way = Graph3.BreadthFirstSearch(6, 0);
+   print_way(way);
+   //=====================================
+   way = Graph3.WeakVertices();
    print_way(way);
 
 }
-
 
 void main()
 {
    test();
    system("pause");
 }
-
 */
+
